@@ -51,7 +51,7 @@ module.exports = function(app, socket)
 
 		// Callback, passing in the results of the final all statement
 		}).then(function(customerDays) {
-			console.log(customerDays);			
+			console.log("first", customerDays);			
 			
 			customerDay.findAll({
 				attributes: ['key','day', countOfKeys],
@@ -61,6 +61,7 @@ module.exports = function(app, socket)
 
 			// Another callback passing in the results of the find all statement
 			}).then(function(allCustomerDays){
+				console.log("second", allCustomerDays);			
 				// Render the page and pass variables from today, the previous findall statement, and the one before
 				res.render('main.ejs', {page: "index", today: today, customerDays: customerDays, allCustomerDays: allCustomerDays});
 			});
@@ -112,6 +113,7 @@ module.exports = function(app, socket)
 								var c = {'day': day, 'key': key, 'customerId': customer.id};
 								customerDays.push(c);
 							});
+						}); //end of forEach
 
 							// Inserts multiple customerDays into the customerDay table
 							customerDay.bulkCreate(customerDays).then(function (cDays) {
@@ -128,7 +130,7 @@ module.exports = function(app, socket)
 								// Send a JSON response and stringify all the info
 								res.send(JSON.stringify({customer: customer}));
 							}); // end customerDay.bulkCreate.then
-						});
+
 					}); // End customer.addMealRequirements.then
 				}); // end mealRequirement.findAll.then
 			}); // end customer.create.then
